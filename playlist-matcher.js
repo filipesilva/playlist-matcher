@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-var makeHash = function(array){
+var makeObj = function(array){
     var hash = {};
     for (var i = array.length - 1; i >= 0; i--) {
         hash[array[i]] = true;
@@ -8,18 +8,37 @@ var makeHash = function(array){
     return hash;
 };
 
-var dirHash = makeHash(fs.readdirSync("./"));
-console.log(dirHash);
+var objDiff = function (obj1, obj2){
+    var diff = {};
+    for (var prop in obj1){
+        if (!obj2.hasOwnProperty(prop)){
+            diff[prop] = true;
+        }
+    }
+    return diff;
+};
 
-var filesHash = makeHash(fs.readFileSync("./playlist.small.m3u", "utf8")
-                .toString().split("\r\n")
-                .filter(function(line){ return line.charAt(0) != '#';})
-                .map(function(line){
-                    if (line.indexOf("\\") != -1){
-                        return line.substring(0, line.indexOf("\\"));
-                    }else{
-                        return line;
-                    }
-                }));
-console.log(filesHash);
+var dirObj = makeObj(fs.readdirSync("./"));
+var filesObj = makeObj(
+                    fs.readFileSync("./"+process.argv[2], "utf8")
+                    .toString().split("\r\n")
+                    .filter(function(line){ return line.charAt(0) != '#';})
+                    .map(function(line){
+                        if (line.indexOf("\\") != -1){
+                            return line.substring(0, line.indexOf("\\"));
+                        }else{
+                            return line;
+                        }
+                    })
+                );
+var missing = objDiff(filesObj, dirObj);
+var unused = objDiff(dirObj, filesObj);
+
+
+
+console.log(dirObj);
+console.log(filesObj);
+console.log("----");
+console.log(missing);
+console.log(unused);
 
