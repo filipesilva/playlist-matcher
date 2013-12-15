@@ -23,7 +23,14 @@ fs.readFile("./playlist.small.m3u", 'utf8',function (err, data) {
         console.log(err);
     } else {
         var lines = data.toString().split("\r\n")
-                    .filter(function(line){ return line.charAt(0) != '#';});
+                    .filter(function(line){ return line.charAt(0) != '#';})
+                    .map(function(line){
+                        if (line.indexOf("\\") != -1){
+                            return line.substring(0, line.indexOf("\\"));
+                        }else{
+                            return line;
+                        }
+                    });
         filesHash = makeHash(lines);
         console.log(filesHash);
     }
