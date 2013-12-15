@@ -1,7 +1,7 @@
 # Playlist matcher
 
-Playlist matcher is a node script for matching existing files between a playlist and a directory. 
-I use it to filter my music collection for unused and missing files.
+Playlist matcher is a node script for matching existing files/folders between a playlist and a directory. 
+I use it to filter my music collection for unused and missing files/folders.
 
 ## Prerequisites
 * Node.js - Download and Install [Node.js](http://www.nodejs.org/download/).
