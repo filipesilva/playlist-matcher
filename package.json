@@ -1,6 +1,6 @@
 {
   "name": "playlist-matcher",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Script to match directory files to playlist",
   "main": "playlist-matcher.js",
   "scripts": {
