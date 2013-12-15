@@ -18,6 +18,22 @@ var objDiff = function (obj1, obj2){
     return diff;
 };
 
+deleteFolderRecursive = function(path) {
+    var files = [];
+    if( fs.existsSync(path) ) {
+        files = fs.readdirSync(path);
+        files.forEach(function(file,index){
+            var curPath = path + "/" + file;
+            if(fs.statSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(path);
+    }
+};
+
 var dirObj = makeObj(fs.readdirSync("./"));
 var filesObj = makeObj(
                     fs.readFileSync("./"+process.argv[2], 'utf8')
@@ -43,8 +59,12 @@ fs.writeFileSync('missing.json', JSON.stringify(missing, null, 2));
 fs.writeFileSync('unused.json', JSON.stringify(unused, null, 2));
 
 if (process.argv[3] == "del"){
-    for (var file in unused){
-        fs.unlinkSync(file);
+    for (var path in unused){
+        if (fs.statSync(path).isDirectory()){
+            deleteFolderRecursive(path);
+        }else{
+            fs.unlinkSync(path);
+        }
     }
 }
 
