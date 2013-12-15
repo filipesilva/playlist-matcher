@@ -34,6 +34,11 @@ var filesObj = makeObj(
 var missing = objDiff(filesObj, dirObj);
 var unused = objDiff(dirObj, filesObj);
 
+delete unused[process.argv[2]];
+delete unused["playlist-matcher.js"];
+delete unused["missing.json"];
+delete unused["unused.json"];
+
 fs.writeFileSync('missing.json', JSON.stringify(missing, null, 2));
 fs.writeFileSync('unused.json', JSON.stringify(unused, null, 2));
 
@@ -42,7 +47,5 @@ if (process.argv[3] == "del"){
         fs.unlinkSync(file);
     }
 }
-
-
 
 
