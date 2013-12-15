@@ -20,7 +20,7 @@ var objDiff = function (obj1, obj2){
 
 var dirObj = makeObj(fs.readdirSync("./"));
 var filesObj = makeObj(
-                    fs.readFileSync("./"+process.argv[2], "utf8")
+                    fs.readFileSync("./"+process.argv[2], 'utf8')
                     .toString().split("\r\n")
                     .filter(function(line){ return line.charAt(0) != '#';})
                     .map(function(line){
@@ -36,6 +36,13 @@ var unused = objDiff(dirObj, filesObj);
 
 fs.writeFileSync('missing.json', JSON.stringify(missing, null, 2));
 fs.writeFileSync('unused.json', JSON.stringify(unused, null, 2));
+
+if (process.argv[3] == "del"){
+    for (var file in unused){
+        fs.unlinkSync(file);
+    }
+}
+
 
 
 
